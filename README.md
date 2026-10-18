@@ -21,11 +21,27 @@ close-reading/                      ← skill 本體（上傳或複製這個資�
 ├── references/
 │   ├── my-research.md              ← 請填你自己的研究
 │   └── qual-methods-checklist.md
+├── scripts/
+│   └── verify_quotes.py            ← 比對精讀卡引文是否逐字存在於 PDF
 └── templates/
     ├── reading-card.md
     └── matrix-row.md
 dist/close-reading.zip              ← 已打包好，可直接上傳 claude.ai
-examples/                           ← 測試產出的精讀卡範例
+examples/                           ← 測試產出的精讀卡與文獻矩陣範例
+```
+
+## 範例與測試
+
+`examples/` 是用兩篇不同性質的文獻實際跑出來的結果（`my-research.md` 空白時的通用模式）：
+
+| 文獻 | 類型 | 測試重點 |
+|---|---|---|
+| Adner (2017), *Journal of Management* | 同儕審查概念文章 | 線上搶先版 2016 與正式卷期 2017 的年份判斷；PDF 頁序與期刊頁碼差 38 的換算；6 則引文全部通過程式比對 |
+| Pidun, Reeves, & Knust (2021), BCG | 顧問實務報告 | 辨識實務文章、不當作實證證據；偵測到 PDF 第 6–11 頁的「EARLY DRAFT—INTERNAL BCG USE ONLY」並發出版本警示；5 則引文全部通過比對 |
+
+自行核對引文（需安裝 poppler 的 `pdftotext`）：
+```bash
+python close-reading/scripts/verify_quotes.py 論文.pdf 精讀卡.md
 ```
 
 ## 安裝
