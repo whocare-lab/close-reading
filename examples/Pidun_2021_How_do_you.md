@@ -1,7 +1,7 @@
 # 精讀卡（Reading Card）：Pidun (2021)
 
 ## 書目（Reference, APA 7th）
-Pidun, U., Reeves, M., & Knust, N. (2021, January). *How do you manage a business ecosystem?* Boston Consulting Group, BCG Henderson Institute. URL 待查證
+Pidun, U., Reeves, M., & Knust, N. (2021, January 20). *How do you manage a business ecosystem?* Boston Consulting Group. https://www.bcg.com/publications/2021/how-to-manage-business-ecosystem
 
 - 文章類型：實務文章
 - 來源性質：顧問報告（BCG Henderson Institute 系列文章第四篇；非同儕審查）
@@ -9,7 +9,7 @@ Pidun, U., Reeves, M., & Knust, N. (2021, January). *How do you manage a busines
 - 頁碼對應：PDF 頁序與印出頁碼相同（第 1 頁未印頁碼）
 - 精讀日期：2026-10-18
 
-> **版本警示**：本 PDF 第 6–11 頁頁首印有「EARLY DRAFT—INTERNAL BCG USE ONLY」，顯示這份檔案可能是內部草稿，而非正式發布版。引用前請到 BCG 官網取得正式版，核對文字、頁碼與發布日期；出版年月依末頁版權標示「© Boston Consulting Group 2021」與「1/21」推定為 2021 年 1 月，仍待正式版確認。
+> **版本警示**：本 PDF 第 6–11 頁頁首印有「EARLY DRAFT—INTERNAL BCG USE ONLY」，顯示這份檔案可能是內部草稿，而非正式發布版。已查到正式版：BCG 官網 2021 年 1 月 20 日發布（書目已更新）。正式網頁版把「不到 15%」的數據註明出自 MIT Sloan Management Review 刊登的研究，草稿版只寫「our research」；引用這個數據時請依正式版標示來源。網頁版沒有頁碼，APA 引用可改用小節標題定位；官網提供 PDF 下載，若改用正式版 PDF，請重新核對頁碼。
 
 ## 核心主張（Core claim）
 生態系失敗多源於治理模式；治理需在五個構件上依策略優先順序做開放或封閉的選擇。
@@ -142,6 +142,7 @@ mindmap
   - 引用正式發布版。
 
 ## 待查證清單（To verify）
-- 正式發布版的 URL、發布日期與頁碼（現有 PDF 第 6–11 頁標示為早期草稿）。
+- 正式版 PDF 的頁碼（網頁版已確認：2021 年 1 月 20 日；現有 PDF 第 6–11 頁為草稿）。
+- 「不到 15%」所引的 MIT Sloan Management Review 原始研究。
 - 引文 5 在正式版中的文字與頁碼是否一致。
 - 註腳 1、6 的原始文獻（Boudreau & Hagiu, 2009；Parker & Van Alstyne, 2017）。
