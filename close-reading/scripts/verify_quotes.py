@@ -3,6 +3,7 @@
 
 Usage:
     python verify_quotes.py paper.pdf card_or_bilingual.md
+    python verify_quotes.py a.pdf b.pdf c.pdf review_draft.md   (several papers)
 
 Checks two kinds of English text (8+ words) against the PDF:
   - every "double-quoted" passage in a reading card, and
@@ -19,6 +20,7 @@ passes if it matches either extraction (two-column pages are sometimes read in a
 different order by one of them). Reports the PDF page(s) of each match.
 Exit code 1 if any passage is not found.
 """
+import os
 import re
 import subprocess
 import sys
@@ -147,28 +149,32 @@ def locate(hay, starts, needle):
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 3:
         print(__doc__)
         sys.exit(2)
-    pdf, path = sys.argv[1], sys.argv[2]
-    hays = []
-    for name, pages in extractions(pdf):
-        normed = [norm(p) for p in pages]
-        starts, pos = [], 0
-        for p in normed:
-            starts.append(pos)
-            pos += len(p)
-        hays.append(("".join(normed), starts))
+    pdfs, path = sys.argv[1:-1], sys.argv[-1]
+    hays = []  # (pdf name, joined text, page starts)
+    for pdf in pdfs:
+        for name, pages in extractions(pdf):
+            normed = [norm(p) for p in pages]
+            starts, pos = [], 0
+            for p in normed:
+                starts.append(pos)
+                pos += len(p)
+            hays.append((pdf, "".join(normed), starts))
+    many = len(pdfs) > 1
     missing = 0
     for q in quotes(path) + blocks(path):
         nq = norm(q).strip('.,;:')
-        res = next((r for r in (locate(h, s, nq) for h, s in hays) if r), None)
+        res = next(((pdf, r) for pdf, h, s in hays for r in [locate(h, s, nq)] if r), None)
         if not res:
             missing += 1
             print(f"NOT FOUND : {q[:90]}")
             continue
-        first, last, breaks = res
+        pdf, (first, last, breaks) = res
         span = f"PDF p.{first}" if first == last else f"PDF pp.{first}-{last}"
+        if many:
+            span = f"{os.path.basename(pdf)} {span}"
         note = f" (across {breaks} page-break interruption(s))" if breaks else ""
         print(f"OK {span:<12}: {q[:90]}{note}")
     sys.exit(1 if missing else 0)
