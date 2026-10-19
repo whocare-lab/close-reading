@@ -140,8 +140,9 @@ mindmap
 ## 7. 交付
 
 1. **核對引文**：環境能執行 Python 時，一律執行
-   `python scripts/verify_quotes.py 論文.pdf 精讀卡.md`
-   它檢查卡片中所有引號內的英文（含智慧標註清單），回報每則在 PDF 第幾頁；NOT FOUND 必須修正或改成轉述。回報的是 PDF 頁序，換算成印出頁碼後與卡片比對。
+   `python scripts/verify_quotes.py --offset 差值 論文.pdf 精讀卡.md`
+   「差值」就是第 1 節算出的頁碼對應（印出頁碼＝PDF 頁序＋差值；例如 PDF 第 1 頁＝期刊第 39 頁，差值 38；頁碼相同就是 0；重印本 page 1 在 PDF 第 2 頁，差值 −1）。
+   它檢查卡片中所有引號內的英文（含智慧標註清單），確認逐字存在，並比對引文旁標註的頁碼是否正確。NOT FOUND 必須修正或改成轉述；PAGE MISMATCH 必須改正頁碼。
    需要 `pdftotext`（poppler）或 `pip install pypdfium2` 其中之一；兩者都有時準確度較高（雙欄排版兩者讀取順序不同，任一吻合即通過）。
    不能執行時逐則回原文確認，並在待查證清單寫「引文未經程式比對」。
 2. 存檔位置：

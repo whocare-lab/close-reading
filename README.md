@@ -95,7 +95,8 @@ pip install pypdf pypdfium2
 
 自行核對（需安裝 `pdftotext` 或 `pypdfium2`）：
 ```bash
-python close-reading/scripts/verify_quotes.py 論文.pdf 精讀卡或對照檔.md
+# --offset：印出頁碼＝PDF 頁序＋差值（例如 PDF 第 1 頁＝期刊第 39 頁，差值 38）；加上後會一併檢查引文旁的頁碼
+python close-reading/scripts/verify_quotes.py --offset 38 論文.pdf 精讀卡或對照檔.md
 ```
 
 ## 使用時請注意

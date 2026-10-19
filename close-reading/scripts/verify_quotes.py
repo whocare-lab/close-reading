@@ -4,6 +4,15 @@
 Usage:
     python verify_quotes.py paper.pdf card_or_bilingual.md
     python verify_quotes.py a.pdf b.pdf c.pdf review_draft.md   (several papers)
+    python verify_quotes.py --offset 38 paper.pdf card.md        (check cited pages too)
+    python verify_quotes.py --offset jacobides.pdf=2253 --offset iansiti.pdf=-1 *.pdf draft.md
+
+--offset N        printed page = PDF page + N (journal page 39 on PDF page 1: N = 38).
+--offset f.pdf=N  the same, for one PDF when checking several.
+With --offset, the page cited right after each quote, e.g. (Adner, 2017, p. 42),
+(…, pp. 47–48) or (…, page 6), is compared with the page where the quote was
+found, and a mismatch is reported as PAGE MISMATCH. Without --offset, the cited
+page is only shown next to the PDF page so you can compare them yourself.
 
 Checks two kinds of English text (8+ words) against the PDF:
   - every "double-quoted" passage in a reading card, and
@@ -18,7 +27,7 @@ page boundary; any word dropped, added or changed inside a page is reported.
 Text is extracted with pdftotext (poppler) and, if installed, pypdfium2; a passage
 passes if it matches either extraction (two-column pages are sometimes read in a
 different order by one of them). Reports the PDF page(s) of each match.
-Exit code 1 if any passage is not found.
+Exit code 1 if any passage is not found or, with --offset, any cited page is wrong.
 """
 import os
 import re
@@ -84,13 +93,27 @@ def norm(s):
     return s.lower()
 
 
+CITED = re.compile(r"^[^\n]{0,80}?\b(?:pp?\.|pages?|頁)\s*(\d+)(?:\s*[-\u2013\u2014~～]\s*(\d+))?", re.I)
+
+
 def quotes(path):
+    """Return (quote, cited_pages) pairs; cited_pages is (first, last) or None."""
     lines = open(path, encoding="utf-8").read().splitlines()
     text = "\n".join(l for l in lines if not l.startswith(">"))  # blockquotes are checked whole
-    found = re.findall("[\"“]([^\"“”\\n]{20,}?)[\"”]", text)
-    cjk = "[　-〿一-鿿＀-￯]"  # text between two separate quotes
-    return [q for q in found if len(q.split()) >= 8 and re.search("[A-Za-z]", q)
-            and not re.search(cjk, q)]
+    cjk = "[\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]"  # text between two separate quotes
+    out = []
+    for m in re.finditer("[\"\u201c]([^\"\u201c\u201d\\n]{20,}?)[\"\u201d]", text):
+        q = m.group(1)
+        if len(q.split()) < 8 or not re.search("[A-Za-z]", q) or re.search(cjk, q):
+            continue
+        c = CITED.match(text[m.end():m.end() + 120])
+        if not c:  # highlight lists put the page first: "- p. 42：\"quote\""
+            before = text[max(0, m.start() - 30):m.start()].split("\n")[-1]
+            hits = list(re.finditer(r"\b(?:pp?\.|pages?|頁)\s*(\d+)(?:\s*[-\u2013\u2014~～]\s*(\d+))?", before, re.I))
+            c = hits[-1] if hits else None
+        cited = (int(c.group(1)), int(c.group(2) or c.group(1))) if c else None
+        out.append((q, cited))
+    return out
 
 
 def blocks(path):
@@ -149,11 +172,22 @@ def locate(hay, starts, needle):
 
 
 def main():
-    if len(sys.argv) < 3:
+    args, offsets, default_off = sys.argv[1:], {}, None
+    while args and args[0] == "--offset":
+        if len(args) < 2:
+            sys.exit("--offset needs a value")
+        v = args[1]
+        if "=" in v:
+            f, n = v.rsplit("=", 1)
+            offsets[os.path.basename(f)] = int(n)
+        else:
+            default_off = int(v)
+        args = args[2:]
+    if len(args) < 2:
         print(__doc__)
         sys.exit(2)
-    pdfs, path = sys.argv[1:-1], sys.argv[-1]
-    hays = []  # (pdf name, joined text, page starts)
+    pdfs, path = args[:-1], args[-1]
+    hays = []  # (pdf, joined text, page starts)
     for pdf in pdfs:
         for name, pages in extractions(pdf):
             normed = [norm(p) for p in pages]
@@ -163,8 +197,10 @@ def main():
                 pos += len(p)
             hays.append((pdf, "".join(normed), starts))
     many = len(pdfs) > 1
-    missing = 0
-    for q in quotes(path) + blocks(path):
+    checking = default_off is not None or bool(offsets)
+    missing = mismatched = 0
+    items = quotes(path) + [(b, None) for b in blocks(path)]
+    for q, cited in items:
         nq = norm(q).strip('.,;:')
         res = next(((pdf, r) for pdf, h, s in hays for r in [locate(h, s, nq)] if r), None)
         if not res:
@@ -176,8 +212,24 @@ def main():
         if many:
             span = f"{os.path.basename(pdf)} {span}"
         note = f" (across {breaks} page-break interruption(s))" if breaks else ""
-        print(f"OK {span:<12}: {q[:90]}{note}")
-    sys.exit(1 if missing else 0)
+        tag = "OK"
+        if cited:
+            ctext = f"p. {cited[0]}" if cited[0] == cited[1] else f"pp. {cited[0]}-{cited[1]}"
+            off = offsets.get(os.path.basename(pdf), default_off)
+            if off is not None:
+                pf, pl = first + off, last + off
+                if not (cited[0] <= pf <= cited[1] or cited[0] <= pl <= cited[1]):
+                    tag = "PAGE MISMATCH"
+                    mismatched += 1
+                    note += f" [cited {ctext}, found on printed p. {pf}" + (f"-{pl}" if pl != pf else "") + "]"
+                else:
+                    note += f" [cited {ctext} ✓]"
+            else:
+                note += f" [cited {ctext}]"
+        elif checking:
+            note += " [no page cited]"
+        print(f"{tag} {span:<12}: {q[:90]}{note}")
+    sys.exit(1 if missing or mismatched else 0)
 
 
 if __name__ == "__main__":
