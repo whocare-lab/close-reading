@@ -1,4 +1,4 @@
-# close-reading-claude | Close Reading and Literature Synthesis Skills for Qualitative Management Research
+# close-reading | Close Reading and Literature Synthesis Skills for Qualitative Management Research
 
 [繁體中文](README.md) ｜ **English**
 
@@ -56,8 +56,8 @@ How it differs from "ask an AI to write my literature review":
 2. **claude.ai**: upload `dist/close-reading.zip` and `dist/lit-synthesis.zip` in the Skills section of settings (re-zip the folders if you edited `my-research.md`).
 3. **Claude Code**:
 ```bash
-git clone https://github.com/whocare-lab/close-reading-claude.git
-cp -R close-reading-claude/close-reading close-reading-claude/lit-synthesis ~/.claude/skills/
+git clone https://github.com/whocare-lab/close-reading.git
+cp -R close-reading/close-reading close-reading/lit-synthesis ~/.claude/skills/
 pip install pypdf pypdfium2
 ```
 

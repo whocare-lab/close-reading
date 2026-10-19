@@ -93,11 +93,11 @@ examples/                           ← 精讀卡、文獻矩陣與綜述整合�
 
 ### 2b. Claude Code
 ```bash
-git clone https://github.com/whocare-lab/close-reading-claude.git
+git clone https://github.com/whocare-lab/close-reading.git
 # macOS / Linux
-cp -R close-reading-claude/close-reading close-reading-claude/lit-synthesis ~/.claude/skills/
+cp -R close-reading/close-reading close-reading/lit-synthesis ~/.claude/skills/
 # Windows（PowerShell）
-Copy-Item -Recurse close-reading-claude\close-reading, close-reading-claude\lit-synthesis $env:USERPROFILE\.claude\skills\
+Copy-Item -Recurse close-reading\close-reading, close-reading\lit-synthesis $env:USERPROFILE\.claude\skills\
 # 腳本需要的套件
 pip install pypdf pypdfium2
 ```
