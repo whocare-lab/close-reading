@@ -1,4 +1,4 @@
-# close-reading-claude｜管理學質性研究文獻精讀與綜述 Skills
+# close-reading｜管理學質性研究文獻精讀與綜述 Skills
 
 **繁體中文** ｜ [English](README.en.md)
 
