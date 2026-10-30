@@ -80,6 +80,20 @@ pip install pypdf pypdfium2
 ```
 產出存到目前專案的 `literature/`：精讀卡在 `cards/`、標註 PDF 在 `annotated/`、對照在 `bilingual/`，文獻矩陣附加到 `literature/matrix.csv`。
 
+### 2c. ChatGPT、Gemini 等其他平台
+同一個 `dist/close-reading.zip` 可直接上傳，**不需要另外改版**。差別只在平台能不能執行 `scripts/` 裡的 Python：
+
+| 項目 | 能執行 Python（Claude、Claude Code） | 不能執行 Python（例如部分 Gemini 環境） |
+|---|---|---|
+| 精讀卡、中英對照 | 產出檔案 | 直接呈現在對話中 |
+| 彩色標註 PDF | 自動產出 | 無法產出，改在精讀卡內列「智慧標註清單」 |
+| 引文逐字核對 | 程式比對 | AI 逐則人工核對，並標「引文未經程式比對」 |
+
+若平台回覆「此環境暫不支援直接執行該外掛腳本」，這是**正常現象**，不是安裝錯誤，精讀卡與中英對照照樣可用。要彩色標註 PDF 與程式核對，請改用 Claude 或 Claude Code。
+
+### 要 PDF 檔？
+說「精讀卡轉成 PDF」或「中英對照給我 PDF」。能執行 Python 的環境會先核對引文、再轉成內嵌中文字型的 PDF，並一併附上 `.md` 原檔。不能執行時，用平台的匯出功能（例如 Gemini 回覆下方的「匯出至 Google 文件」，再從 Google 文件下載 PDF），或貼到 Word 另存 PDF。
+
 ## 範例與測試
 
 用兩篇性質不同的文獻實際測試（`my-research.md` 空白時的通用模式）：

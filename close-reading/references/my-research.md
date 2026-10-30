@@ -1,8 +1,8 @@
 # 我目前的研究（請填寫，並隨研究進度更新）
 
-> 精讀時，Claude 用這份檔案判斷文獻與你論文的關係。
+> 精讀時，AI（Claude、ChatGPT、Gemini 等）用這份檔案判斷文獻與你論文的關係。
 > 沒填也能用，但只會得到通用評估，無法對應到你自己的章節。
-> 填寫後請重新打包 zip 上傳（claude.ai），或直接存檔（Claude Code）。
+> 填寫後請重新打包 zip 上傳（claude.ai、ChatGPT、Gemini），或直接存檔（Claude Code）。
 
 ## 論文
 - 題目：

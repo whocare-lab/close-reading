@@ -59,6 +59,20 @@ pip install pypdf pypdfium2
 ```
 Outputs go to `literature/` in the current project (`cards/`, `annotated/`, `bilingual/`), and a row is appended to `literature/matrix.csv`.
 
+### 2c. ChatGPT, Gemini and other platforms
+Upload the same `dist/close-reading.zip`; **no separate version is needed**. The only difference is whether the platform can run the Python in `scripts/`:
+
+| Item | Python available (Claude, Claude Code) | No Python (e.g. some Gemini environments) |
+|---|---|---|
+| Reading card, bilingual text | Delivered as files | Shown directly in the chat |
+| Highlighted PDF | Produced automatically | Not produced; the card's highlight list is still included |
+| Verbatim quote check | Checked by script | Checked one by one by the model and flagged "quotes not checked by script" |
+
+If the platform says it cannot run the skill's scripts, that is **expected**, not an installation error; the reading card and bilingual text still work. For highlighted PDFs and scripted checks, use Claude or Claude Code.
+
+### Want a PDF?
+Ask for "the reading card as a PDF" or "the bilingual text as a PDF". Where Python runs, quotes are checked first, then the file is converted with an embedded CJK font, and the `.md` source is delivered alongside. Otherwise, use the platform's export (for example Gemini's "Export to Docs", then download as PDF from Google Docs), or paste into Word and save as PDF.
+
 ## Examples and tests
 
 Tested on two very different documents (with an empty `my-research.md`):
